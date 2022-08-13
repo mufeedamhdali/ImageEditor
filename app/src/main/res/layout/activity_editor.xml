@@ -39,7 +39,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
         android:orientation="horizontal"
-        android:weightSum="6">
+        android:weightSum="8">
 
         <Button
             android:id="@+id/btnCrop"
@@ -66,6 +66,15 @@
             android:layout_weight="2"
             android:backgroundTint="@android:color/white"
             android:drawableTop="@drawable/flip_icon_vertical"
+            android:stateListAnimator="@null" />
+
+        <Button
+            android:id="@+id/btnDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:backgroundTint="@android:color/white"
+            android:drawableTop="@drawable/info_icon"
             android:stateListAnimator="@null" />
 
     </LinearLayout>

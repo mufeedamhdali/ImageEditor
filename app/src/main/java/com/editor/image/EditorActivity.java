@@ -1,5 +1,6 @@
 package com.editor.image;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
@@ -32,6 +33,7 @@ public class EditorActivity extends AppCompatActivity {
     Button btnFlipVert;
     Button btnSave;
     Button btnCrop;
+    Button btnDetails;
     Uri uri;
     int unit;
     Bitmap bitmap;
@@ -46,6 +48,7 @@ public class EditorActivity extends AppCompatActivity {
         btnFlipVert = findViewById(R.id.btnFlipV);
         btnSave = findViewById(R.id.btnSave);
         btnCrop = findViewById(R.id.btnCrop);
+        btnDetails = findViewById(R.id.btnDetails);
 
         Intent intent = getIntent();
         if ((intent.getStringExtra("filePath")) != null) {
@@ -56,30 +59,51 @@ public class EditorActivity extends AppCompatActivity {
 
         editImage.setImageURI(uri);
 
-
-        btnFlipHori.setOnClickListener(v -> {
-            Bitmap bitmap = ((BitmapDrawable)editImage.getDrawable()).getBitmap(); // get bitmap associated with your imageview
-            editImage.setImageBitmap(flipHorizontal(bitmap));
-        });
-
-        btnFlipVert.setOnClickListener(v -> {
-            Bitmap bitmap = ((BitmapDrawable)editImage.getDrawable()).getBitmap(); // get bitmap associated with your imageview
-            editImage.setImageBitmap(flipVertical(bitmap));
-        });
-
-        btnSave.setOnClickListener(v -> {
-            long tsLong = System.currentTimeMillis()/1000;
-            String fileName = Long.toString(tsLong);
-            Bitmap bitmap = ((BitmapDrawable)editImage.getDrawable()).getBitmap();
-            saveImage(bitmap, fileName, "jpeg" );
-        });
-
         btnCrop.setOnClickListener(v -> {
-            bitmap = ((BitmapDrawable)editImage.getDrawable()).getBitmap();
+            bitmap = ((BitmapDrawable) editImage.getDrawable()).getBitmap();
             int imageHeight = bitmap.getHeight();
             int imageWidth = bitmap.getWidth();
             unit = Math.min(imageHeight, imageWidth);
             showPopupMenu(v);
+        });
+
+
+        btnFlipHori.setOnClickListener(v -> {
+            Bitmap bitmap = ((BitmapDrawable) editImage.getDrawable()).getBitmap(); // get bitmap associated with your imageview
+            editImage.setImageBitmap(flipHorizontal(bitmap));
+        });
+
+        btnFlipVert.setOnClickListener(v -> {
+            Bitmap bitmap = ((BitmapDrawable) editImage.getDrawable()).getBitmap(); // get bitmap associated with your imageview
+            editImage.setImageBitmap(flipVertical(bitmap));
+        });
+
+        btnDetails.setOnClickListener(v -> {
+            Bitmap bitmap = ((BitmapDrawable) editImage.getDrawable()).getBitmap(); // get bitmap associated with your imageview
+
+            AlertDialog.Builder imageDetails = new AlertDialog.Builder(EditorActivity.this);
+            imageDetails.setTitle("Image Details");
+            imageDetails.setMessage(
+                    "Height: " + bitmap.getHeight() + "\n"
+                            + "Width: " + bitmap.getWidth() + "\n"
+                            + "Size: " + bytesToSize(bitmap.getByteCount()) + "\n"
+                            + "Location: " + uri.getPath()
+            );
+            imageDetails.setCancelable(true);
+
+            imageDetails.setPositiveButton(
+                    "Ok",
+                    (dialog, id) -> dialog.cancel());
+
+            AlertDialog details = imageDetails.create();
+            details.show();
+        });
+
+        btnSave.setOnClickListener(v -> {
+            long tsLong = System.currentTimeMillis() / 1000;
+            String fileName = Long.toString(tsLong);
+            Bitmap bitmap = ((BitmapDrawable) editImage.getDrawable()).getBitmap();
+            saveImage(bitmap, fileName, "jpeg");
         });
 
     }
@@ -94,14 +118,13 @@ public class EditorActivity extends AppCompatActivity {
                 Bitmap resBitMap = cropImage(bitmap, rectf);
                 editImage.setImageBitmap(resBitMap);
             } else if (item.getItemId() == R.id.three_four) {
-                unit = unit/3;
-                RectF rectf = new RectF(0, 0, unit*3, unit*4);
+                unit = unit / 3;
+                RectF rectf = new RectF(0, 0, unit * 3, unit * 4);
                 Bitmap resBitMap = cropImage(bitmap, rectf);
                 editImage.setImageBitmap(resBitMap);
-            }
-            else if (item.getItemId() == R.id.nine_sixteen) {
-                unit = unit/9;
-                RectF rectf = new RectF(0, 0, unit*9, unit*16);
+            } else if (item.getItemId() == R.id.nine_sixteen) {
+                unit = unit / 9;
+                RectF rectf = new RectF(0, 0, unit * 9, unit * 16);
                 Bitmap resBitMap = cropImage(bitmap, rectf);
                 editImage.setImageBitmap(resBitMap);
             }
@@ -145,7 +168,7 @@ public class EditorActivity extends AppCompatActivity {
         return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
     }
 
-    public void saveImage(Bitmap bitmap, String name, String extension){
+    public void saveImage(Bitmap bitmap, String name, String extension) {
         name = name + "." + extension;
         FileOutputStream fileOutputStream;
         try {
@@ -164,6 +187,32 @@ public class EditorActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private String bytesToSize(long bytes) {
+        long kilobyte = 1024;
+        long megabyte = kilobyte * 1024;
+        long gigabyte = megabyte * 1024;
+        long terabyte = gigabyte * 1024;
+
+        if ((bytes >= 0) && (bytes < kilobyte)) {
+            return bytes + " B";
+
+        } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+            return (bytes / kilobyte) + " KB";
+
+        } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+            return (bytes / megabyte) + " MB";
+
+        } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+            return (bytes / gigabyte) + " GB";
+
+        } else if (bytes >= terabyte) {
+            return (bytes / terabyte) + " TB";
+
+        } else {
+            return bytes + " Bytes";
         }
     }
 }
