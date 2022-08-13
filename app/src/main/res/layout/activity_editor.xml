@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="20dp"
+    tools:context=".EditorActivity">
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:backgroundTint="@android:color/white"
+        android:drawableTop="@drawable/save_icon"
+        android:stateListAnimator="@null" />
+
+    <ImageView
+        android:id="@+id/editImage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/llop"
+        android:layout_below="@id/btnSave"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="EditImage"
+        android:scaleType="centerCrop"
+        android:src="@drawable/editor_home_text" />
+
+    <LinearLayout
+        android:id="@+id/llop"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <Button
+            android:id="@+id/btnCrop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:backgroundTint="@android:color/white"
+            android:drawableTop="@drawable/crop_icon"
+            android:stateListAnimator="@null" />
+
+        <Button
+            android:id="@+id/btnFlipH"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:backgroundTint="@android:color/white"
+            android:drawableTop="@drawable/flip_icon_horizontal"
+            android:stateListAnimator="@null" />
+
+        <Button
+            android:id="@+id/btnFlipV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:backgroundTint="@android:color/white"
+            android:drawableTop="@drawable/flip_icon_vertical"
+            android:stateListAnimator="@null" />
+
+    </LinearLayout>
+
+</RelativeLayout>
